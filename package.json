@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/NekoCarreraDesigns/employee-tracker/issues"
   },
-  "homepage": "https://github.com/NekoCarreraDesigns/employee-tracker#readme"
+  "homepage": "https://github.com/NekoCarreraDesigns/employee-tracker#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
