@@ -23,6 +23,7 @@ connection.connect(function (err) {
 //     lastName: "",
 //     title: "",
 //     department: "",
+//     salary: 100000,
 //     manager: "",
 
 // },
