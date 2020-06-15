@@ -1,8 +1,14 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "employee tracker app",
-  "main": "n",
+  "description": "Employee Tracker",
+  "main": "employee.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.2.0",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "node employee.js"
   },
@@ -13,18 +19,13 @@
   "keywords": [
     "employee",
     "tracker",
-    "express.js",
-    "MySQL"
+    "node.js",
+    "mysql"
   ],
   "author": "Neko Carrera",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/NekoCarreraDesigns/employee-tracker/issues"
   },
-  "homepage": "https://github.com/NekoCarreraDesigns/employee-tracker#readme",
-  "dependencies": {
-    "console.table": "^0.10.0",
-    "inquirer": "^7.2.0",
-    "mysql": "^2.18.1"
-  }
+  "homepage": "https://github.com/NekoCarreraDesigns/employee-tracker#readme"
 }
