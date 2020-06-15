@@ -1,0 +1,25 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "employee tracker app",
+  "main": "n",
+  "scripts": {
+    "test": "node employee.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NekoCarreraDesigns/employee-tracker.git"
+  },
+  "keywords": [
+    "employee",
+    "tracker",
+    "express.js",
+    "MySQL"
+  ],
+  "author": "Neko Carrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NekoCarreraDesigns/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/NekoCarreraDesigns/employee-tracker#readme"
+}
