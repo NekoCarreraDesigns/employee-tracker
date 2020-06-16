@@ -4,7 +4,7 @@ const inquirer = require("inquirer");
 const cTable = require(console.table);
 //creata database connection
 const connection = mysql.createConnection({
-    host: "employeeHost",
+    host: "employeehost",
     port: 3306,
     user: "root",
     password: "8Limb$Thai1978",
@@ -16,21 +16,37 @@ connection.connect(function (err) {
     console.log("Shalom brother!")
     start();
 })
-// created console.table to print to terminal
-// const table = cTable.getTable([{
-//     id: "",
-//     firstName: "",
-//     lastName: "",
-//     title: "",
-//     department: "",
-//     salary: 100000,
-//     manager: "",
+//created console.table to print to terminal
+const table = cTable.getTable([{
+    id: "",
+    firstName: "",
+    lastName: "",
+    title: "",
+    department: "",
+    salary: 100000,
+    manager: "",
 
-// },
-// ])
+},
+])
 
-// console.log(table)
+console.log(table)
+//employe class constructor to enter a new employee
+class Employee {
+    constructor(id, firstname, lastname, department, salary, manager) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.department = department;
+        this.salary = salary;
+        this.manager = manager;
+    }
+}
+//variable to create new employee
+const employee = new Employee(this.id, this.firstname, this.lastname, this.department, this.salary, this.manager);
+console.log(employee);
+employee.push(employeeData);
 
+const employeeData = []
 
 
 //initial function prompt for app with list of options
@@ -48,5 +64,17 @@ function start() {
             "Update Employee Role",
             "Update Employee Manager"
         ]
+    }).then(function (answers) {
+        if (answers.intro === "View All Employees") {
+            return employeeData
+        }
+    });
+};
+function department() {
+    inquirer.prompt({
+        name: "department",
+        type: "list",
+        message: "What department would you like to view?",
+        c
     })
 }
