@@ -12,4 +12,20 @@ create table department
     (30),
     primary key
     (id)
-)
+);
+    create table position
+    (
+        id integer not null,
+        title varchar (30),
+        salary decimal (6),
+        primary key (id)
+    );
+
+    create table employee
+    (
+        id integer not null,
+        first_name varchar (30),
+        last_name varchar (30),
+        position_id integer,
+        manager_id integer
+    );
