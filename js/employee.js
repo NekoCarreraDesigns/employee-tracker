@@ -64,13 +64,14 @@ function start() {
             "Update Employee Role",
             "Update Employee Manager"
         ]
-    }).then(function (answers) {
+        //switch statement for options
+    }).then((answers) => {
         if (answers.intro === "View All Employees") {
             return employeeData
         }
     });
 };
-function department() {
+department = () => {
     inquirer.prompt({
         name: "department",
         type: "list",
