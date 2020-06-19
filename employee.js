@@ -17,17 +17,17 @@ connection.connect(function (err) {
     start();
 })
 //created console.table to print to terminal
-const table = cTable.getTable([{
-    id: "",
-    firstName: "",
-    lastName: "",
-    title: "",
-    department: "",
-    salary: 100000,
-    manager: "",
+// const table = cTable.getTable([{
+//     id: "",
+//     firstName: "",
+//     lastName: "",
+//     title: "",
+//     department: "",
+//     salary: 100000,
+//     manager: "",
 
-},
-])
+// },
+// ])
 
 console.log(table)
 //employe class constructor to enter a new employee
@@ -42,11 +42,11 @@ class Employee {
     }
 }
 //variable to create new employee
-const employee = new Employee(this.id, this.firstname, this.lastname, this.department, this.salary, this.manager);
-console.log(employee);
-employee.push(employeeData);
+// const employee = new Employee("this.id, this.firstname, this.lastname, this.department, this.salary, this.manager");
+// console.log(employee);
+// employee.push(employeeData);
 
-const employeeData = []
+//const employeeData = []
 
 
 //initial function prompt for app with list of options
@@ -62,20 +62,43 @@ function start() {
             "Add Employee",
             "Remove Employee",
             "Update Employee Role",
-            "Update Employee Manager"
+            "Update Employee Manager",
+            "Exit"
         ]
         //switch statement for options
     }).then((answers) => {
-        if (answers.intro === "View All Employees") {
-            return employeeData
+        switch (answers) {
+            case "View All Employees":
+                return employeeView();
+                break;
+            case "View All Employees by Department":
+                return departmentView();
+                break;
+            case "View All Employees by Manager":
+                return managerView();
+                break;
+            case "Add Employee":
+                return addEmployee();
+                break;
+            case "Remove Employee":
+                return trashCompactor();
+                break;
+            case "Update Employee Role":
+                return updateEmployee();
+                break;
+            case "Update Employee Manager":
+                return managerUpdate();
+                break;
+            case "exit":
+                return connection.end();
         }
     });
 };
-department = () => {
+employeeView = () => {
     inquirer.prompt({
-        name: "department",
+        name: "viewer",
         type: "list",
-        message: "What department would you like to view?",
-        c
+        message: "What employee would you like to view?",
+
     })
 }
