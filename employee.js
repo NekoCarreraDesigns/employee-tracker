@@ -35,24 +35,6 @@ connection.connect(function (err) {
 // ]);
 
 //console.log(table)
-//employe class constructor to enter a new employee
-// class Employee {
-//     constructor(id, firstname, lastname, department, salary, manager) {
-//         this.id = id;
-//         this.firstname = firstname;
-//         this.lastname = lastname;
-//         this.department = department;
-//         this.salary = salary;
-//         this.manager = manager;
-//     }
-// }
-//variable to create new employee
-// const employee = new Employee("this.id, this.firstname, this.lastname, this.department, this.salary, this.manager");
-// console.log(employee);
-// employee.push(employeeData);
-
-//const employeeData = []
-
 
 //initial function prompt for app with list of options
 start = () => {
@@ -135,6 +117,36 @@ departmentView = () => {
     //     console.log(res);
     // })
 };
+managerView = () => {
+    connection.query("SELECT * FROM employee INNER JOiN position ON employee.id = position.title", (err, res) => {
+        console.log(res);
+    });
+};
+addEmployee = () => {
+    inquirer.prompt({
+        type: "input",
+        message: "What is their name?",
+        name: "name"
+    },
+        {
+            type: "input",
+            message: "What is their role?",
+            name: "role"
+        },
+        {
+            type: "input",
+            message: "What is their department?",
+            name: "Department"
+        },
+        {
+            type: "input",
+            message: "Who is their Manager?",
+            name: "captain"
+        }).then((answers) => {
+            console.log(answers);
+        })
+}
+//listener for the server
 app.listen(PORT, (err, data) => {
     console.log("I'm listening on port:" + PORT);
 });
