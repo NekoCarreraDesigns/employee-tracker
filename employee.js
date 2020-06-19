@@ -1,12 +1,12 @@
 //declare dependencies
-const express = require("express")
+const express = require("express");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 // const cTable = require(console.table);
 //declare express variable
 const app = express();
 //create server port
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000;
 //create database connection
 const connection = mysql.createConnection({
     host: "localhost",
@@ -14,13 +14,13 @@ const connection = mysql.createConnection({
     user: "root",
     password: "8Limb$Thai1978",
     database: "employee_DB"
-})
+});
 //connect to database
 connection.connect(function (err) {
     if (err) throw (err);
-    console.log("Shalom brother!")
+    console.log("Shalom brother!");
     start();
-})
+});
 //created console.table to print to terminal
 // const table = cTable.getTable([{
 //     id: "",
@@ -32,7 +32,7 @@ connection.connect(function (err) {
 //     manager: "",
 
 // },
-// ])
+// ]);
 
 //console.log(table)
 //employe class constructor to enter a new employee
@@ -69,7 +69,7 @@ start = () => {
             "Update Employee Role",
             "Update Employee Manager",
             "Exit"
-        ]
+        ],
         //switch statement for options
     }).then((answers) => {
         switch (answers.intro) {
@@ -96,15 +96,45 @@ start = () => {
                 break;
             case "exit":
                 return connection.end();
-        }
+        };
     });
 };
 employeeView = () => {
     connection.query("SELECT * FROM employee", (err, res) => {
         console.log(res);
 
-    })
-}
+    });
+};
+departmentView = () => {
+    inquirer.prompt({
+        type: "list",
+        name: "deptViewer",
+        message: "What Department would you like to view?",
+        choices: ["Advertising", "Development", "Legal", "Sales"]
+    }).then((answers) => {
+        switch (answers.deptViewer) {
+            case "Advertising":
+                return connection.query("SELECT * FROM department INNER JOIN employee ON department.id = employee.id ", (err, res) => {
+                    console.log(res);
+                });
+            case "Development":
+                return connection.query("SELECT * FROM department INNER JOIN employee ON department.id = employee.id", (err, res) => {
+                    console.log(res);
+                });
+            case "Legal":
+                return connection.query("SELECT name FROM department", (err, res) => {
+                    console.log(res);
+                });
+            case "Sales":
+                return connection.query("SELECT name FROM department", (err, res) => {
+                    console.log(res);
+                });
+        };
+    });
+    // connection.query("SELECT * FROM department", (err, res) => {
+    //     console.log(res);
+    // })
+};
 app.listen(PORT, (err, data) => {
-    console.log("I'm listening on port:" + PORT)
-})
+    console.log("I'm listening on port:" + PORT);
+});
