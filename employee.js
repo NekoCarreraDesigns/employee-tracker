@@ -1,10 +1,15 @@
 //declare dependencies
+const express = require("express")
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const cTable = require(console.table);
-//creata database connection
+// const cTable = require(console.table);
+//declare express variable
+const app = express();
+//create server port
+const PORT = process.env.PORT || 4000
+//create database connection
 const connection = mysql.createConnection({
-    host: "employeehost",
+    host: "localhost",
     port: 3306,
     user: "root",
     password: "8Limb$Thai1978",
@@ -29,18 +34,18 @@ connection.connect(function (err) {
 // },
 // ])
 
-console.log(table)
+//console.log(table)
 //employe class constructor to enter a new employee
-class Employee {
-    constructor(id, firstname, lastname, department, salary, manager) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.department = department;
-        this.salary = salary;
-        this.manager = manager;
-    }
-}
+// class Employee {
+//     constructor(id, firstname, lastname, department, salary, manager) {
+//         this.id = id;
+//         this.firstname = firstname;
+//         this.lastname = lastname;
+//         this.department = department;
+//         this.salary = salary;
+//         this.manager = manager;
+//     }
+// }
 //variable to create new employee
 // const employee = new Employee("this.id, this.firstname, this.lastname, this.department, this.salary, this.manager");
 // console.log(employee);
@@ -50,7 +55,7 @@ class Employee {
 
 
 //initial function prompt for app with list of options
-function start() {
+start = () => {
     inquirer.prompt({
         name: "intro",
         type: "list",
@@ -67,7 +72,7 @@ function start() {
         ]
         //switch statement for options
     }).then((answers) => {
-        switch (answers) {
+        switch (answers.intro) {
             case "View All Employees":
                 return employeeView();
                 break;
@@ -95,10 +100,11 @@ function start() {
     });
 };
 employeeView = () => {
-    inquirer.prompt({
-        name: "viewer",
-        type: "list",
-        message: "What employee would you like to view?",
+    connection.query("SELECT * FROM employee", (err, res) => {
+        console.log(res);
 
     })
 }
+app.listen(PORT, (err, data) => {
+    console.log("I'm listening on port:" + PORT)
+})
