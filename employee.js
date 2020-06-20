@@ -190,15 +190,37 @@ trashCompactor = () => {
         message: "What is their manager id?",
         name: "manager_id"
     }]).then((answer) => {
-        connection.query("DELETE FROM employee Where ?", {
-            first_name: answer.cleaner,
-            last_name: answer.cleaner
+        connection.query("DELETE FROM employee WHERE manager_id = 0", {
+            id: answer.id,
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            position_id: answer.position_id,
+            manager_id: answer.manager_id
         }, (err, res) => {
             if (err) throw (err);
-            console.log(res.affectedRows + "Employee Removed!")
+            console.log(res.affectedRows + "Employee Removed!");
+            start();
         });
     });
+
 };
+updateEmployee = () => {
+    inquirer.prompt({
+        type: "list",
+        message: "What is their new role?",
+        name: "updater",
+        choices: ["Manager", "Associate", "Legal", "Development"]
+    }).then((updates) => {
+        switch (updates.updater) {
+            case "Manager"
+        }
+    })
+    connection.query("UPDATE employee SET ? WHERE ?", {
+
+    }, (err, res) => {
+
+    })
+}
 //listener for the server
 app.listen(PORT, (err, data) => {
     console.log("I'm listening on port:" + PORT);
