@@ -2,6 +2,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const { response } = require("express");
 // const cTable = require(console.table);
 //declare express variable
 const app = express();
@@ -84,6 +85,7 @@ start = () => {
 employeeView = () => {
     connection.query("SELECT * FROM employee", (err, res) => {
         console.log(res);
+        start();
 
     });
 };
@@ -113,9 +115,6 @@ departmentView = () => {
                 });
         };
     });
-    // connection.query("SELECT * FROM department", (err, res) => {
-    //     console.log(res);
-    // })
 };
 managerView = () => {
     connection.query("SELECT * FROM employee INNER JOiN position ON employee.id = position.title", (err, res) => {
@@ -123,29 +122,83 @@ managerView = () => {
     });
 };
 addEmployee = () => {
-    inquirer.prompt({
+    inquirer.prompt([{
+
         type: "input",
-        message: "What is their name?",
-        name: "name"
+        message: "What is their first name?",
+        name: "first_name"
+
     },
-        {
-            type: "input",
-            message: "What is their role?",
-            name: "role"
-        },
-        {
-            type: "input",
-            message: "What is their department?",
-            name: "Department"
-        },
-        {
-            type: "input",
-            message: "Who is their Manager?",
-            name: "captain"
-        }).then((answers) => {
-            console.log(answers);
-        })
-}
+    {
+        type: "input",
+        message: "What is their last name?",
+        name: "last_name"
+    },
+    {
+        type: "input",
+        message: "What is their id?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What is their position id?",
+        name: "position_id"
+    },
+    {
+        type: "input",
+        message: "What is their manager id?",
+        name: "manager_id"
+    }]).then((responses) => {
+        connection.query("INSERT INTO employee SET ?",
+            {
+                id: responses.id,
+                first_name: responses.first_name,
+                last_name: responses.last_name,
+                position_id: responses.position_id,
+                manager_id: responses.manager_id
+            },
+            (err, res) => {
+                if (err) throw (err);
+                console.log(res.affectedRows + "Employee Added!");
+                start();
+            });
+    });
+};
+trashCompactor = () => {
+    inquirer.prompt([{
+        type: "input",
+        message: "What is the first name of the employee?",
+        name: "first_name"
+    },
+    {
+        type: "input",
+        Maessage: "What is their last name?",
+        name: "last_name"
+    },
+    {
+        type: "input",
+        message: "What is their id?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What is their position id?",
+        name: "position_id"
+    },
+    {
+        type: "input",
+        message: "What is their manager id?",
+        name: "manager_id"
+    }]).then((answer) => {
+        connection.query("DELETE FROM employee Where ?", {
+            first_name: answer.cleaner,
+            last_name: answer.cleaner
+        }, (err, res) => {
+            if (err) throw (err);
+            console.log(res.affectedRows + "Employee Removed!")
+        });
+    });
+};
 //listener for the server
 app.listen(PORT, (err, data) => {
     console.log("I'm listening on port:" + PORT);
