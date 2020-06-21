@@ -3,7 +3,7 @@ const express = require("express");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { response } = require("express");
-// const cTable = require(console.table);
+const cTable = require("console.table");
 //declare express variable
 const app = express();
 //create server port
@@ -19,23 +19,9 @@ const connection = mysql.createConnection({
 //connect to database
 connection.connect(function (err) {
     if (err) throw (err);
-    console.log("Shalom brother!");
+    console.log("Hola Amigo!");
     start();
 });
-//created console.table to print to terminal
-// const table = cTable.getTable([{
-//     id: "",
-//     firstName: "",
-//     lastName: "",
-//     title: "",
-//     department: "",
-//     salary: 100000,
-//     manager: "",
-
-// },
-// ]);
-
-//console.log(table)
 
 //initial function prompt for app with list of options
 start = () => {
@@ -84,7 +70,7 @@ start = () => {
 };
 employeeView = () => {
     connection.query("SELECT * FROM employee", (err, res) => {
-        console.log(res);
+        console.table(res);
         start();
 
     });
@@ -98,27 +84,31 @@ departmentView = () => {
     }).then((answers) => {
         switch (answers.deptViewer) {
             case "Advertising":
-                return connection.query("SELECT * FROM department INNER JOIN employee ON department.id = employee.id ", (err, res) => {
-                    console.log(res);
+                return connection.query("SELECT department.id, name, title, salary, position_id FROM department LEFT JOIN role ON name = position_id", (err, res) => {
+                    console.table(res);
+                    start();
                 });
             case "Development":
-                return connection.query("SELECT * FROM department INNER JOIN employee ON department.id = employee.id", (err, res) => {
-                    console.log(res);
+                return connection.query("SELECT FROM department LEFT JOIN  ON department.id = position_id", (err, res) => {
+                    console.table(res);
+                    start();
                 });
             case "Legal":
                 return connection.query("SELECT name FROM department", (err, res) => {
-                    console.log(res);
+                    console.table(res);
+                    start();
                 });
             case "Sales":
                 return connection.query("SELECT name FROM department", (err, res) => {
-                    console.log(res);
+                    console.table(res);
+                    start();
                 });
         };
     });
 };
 managerView = () => {
-    connection.query("SELECT * FROM employee INNER JOiN position ON employee.id = position.title", (err, res) => {
-        console.log(res);
+    connection.query("SELECT * FROM employee LEFT JOiN role ON id = role.id", (err, res) => {
+        console.table(res);
     });
 };
 addEmployee = () => {
@@ -159,7 +149,7 @@ addEmployee = () => {
             },
             (err, res) => {
                 if (err) throw (err);
-                console.log(res.affectedRows + "Employee Added!");
+                console.table(res.affectedRows + "Employee Added!");
                 start();
             });
     });
@@ -190,7 +180,7 @@ trashCompactor = () => {
         message: "What is their manager id?",
         name: "manager_id"
     }]).then((answer) => {
-        connection.query("DELETE FROM employee WHERE manager_id = 0", {
+        connection.query("DELETE FROM employee WHERE manager_id = null", {
             id: answer.id,
             first_name: answer.first_name,
             last_name: answer.last_name,
@@ -198,7 +188,7 @@ trashCompactor = () => {
             manager_id: answer.manager_id
         }, (err, res) => {
             if (err) throw (err);
-            console.log(res.affectedRows + "Employee Removed!");
+            console.table(res.affectedRows + "Employee Removed!");
             start();
         });
     });
@@ -207,12 +197,14 @@ trashCompactor = () => {
 updateEmployee = () => {
     inquirer.prompt({
         type: "list",
-        message: "What is their new role?",
+        message: "Select employee to update",
         name: "updater",
-        choices: ["Manager", "Associate", "Legal", "Development"]
+        choices: [connection.query("SELECT * FROM employee", (err, res) => {
+            console.table(res)
+        })]
     }).then((updates) => {
         switch (updates.updater) {
-            case "Manager"
+            case "Manager":
         }
     })
     connection.query("UPDATE employee SET ? WHERE ?", {
