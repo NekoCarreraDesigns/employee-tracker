@@ -6,7 +6,7 @@ const { response } = require("express");
 const cTable = require("console.table");
 //declare express variable
 const app = express();
-//create server port
+//create server port and Heroku environment
 const PORT = process.env.PORT || 4000;
 //create database connection
 const connection = mysql.createConnection({
@@ -32,7 +32,7 @@ start = () => {
         choices: [
             "View All Employees",
             "View All Employees by Department",
-            "View All Employees by manager",
+            "View All Employees by Manager",
             "Add Employee",
             "Remove Employee",
             "Update Employee Role",
@@ -69,7 +69,7 @@ start = () => {
     });
 };
 employeeView = () => {
-    connection.query("SELECT * FROM employee", (err, res) => {
+    connection.query("SELECT * FROM employees", (err, res) => {
         console.table(res);
         start();
 
@@ -80,26 +80,31 @@ departmentView = () => {
         type: "list",
         name: "deptViewer",
         message: "What Department would you like to view?",
-        choices: ["Advertising", "Development", "Legal", "Sales"]
+        choices: ["Advertising", "Development", "Legal", "Sales", "President"]
     }).then((answers) => {
         switch (answers.deptViewer) {
             case "Advertising":
-                return connection.query("SELECT department.id, name, title, salary, position_id FROM department LEFT JOIN role ON name = position_id", (err, res) => {
+                return connection.query("SELECT first_name, last_name, role_id FROM employees WHERE role_id = 2 ", (err, res) => {
                     console.table(res);
                     start();
                 });
             case "Development":
-                return connection.query("SELECT FROM department LEFT JOIN  ON department.id = position_id", (err, res) => {
+                return connection.query("SELECT first_name, last_name, role_id FROM employees WHERE role_id = 1", (err, res) => {
                     console.table(res);
                     start();
                 });
             case "Legal":
-                return connection.query("SELECT name FROM department", (err, res) => {
+                return connection.query("SELECT first_name, last_name, role_id FROM employees WHERE role_id = 3", (err, res) => {
                     console.table(res);
                     start();
                 });
             case "Sales":
-                return connection.query("SELECT name FROM department", (err, res) => {
+                return connection.query("SELECT first_name, last_name, role_id FROM employees WHERE role_id = 4", (err, res) => {
+                    console.table(res);
+                    start();
+                });
+            case "President":
+                return connection.query("SELECT first_name, last_name, role_id FROM employees WHERE role_id = 5", (err, res) => {
                     console.table(res);
                     start();
                 });
@@ -107,8 +112,36 @@ departmentView = () => {
     });
 };
 managerView = () => {
-    connection.query("SELECT * FROM employee LEFT JOiN role ON id = role.id", (err, res) => {
-        console.table(res);
+    inquirer.prompt({
+        type: "list",
+        name: "bossman",
+        message: "What department manager do you want?",
+        choices: ["Nicholas Maas", "Jessica Kalin", "Samantha Tinoco", "Mike Christner"]
+    }).then((answer) => {
+        switch (answer.bossman) {
+            case "Nicholas Maas":
+                return connection.query("SELECT * FROM employees WHERE manager_id = 1", (err, res) => {
+                    console.table(res);
+                    start();
+                });
+            case "Jessica Kalin":
+                return connection.query("SELECT first_name, last_name FROM employees WHERE role_id = 4", (err, res) => {
+                    console.table(res);
+                    start();
+                });
+            case "Samantha Tinoco":
+                return connection.query("SELECT first_name, last_name FROM employees WHERE role_id = 3", (err, res) => {
+                    console.table(res);
+                    start();
+                });
+            case "Mike Christner":
+                return connection.query("SELECT first_name, last_name FROM employees WHERE role_id = 2", (err, res) => {
+                    console.table(res);
+                    start();
+                });
+
+
+        };
     });
 };
 addEmployee = () => {
@@ -125,27 +158,18 @@ addEmployee = () => {
         name: "last_name"
     },
     {
-        type: "input",
-        message: "What is their id?",
-        name: "id"
-    },
-    {
-        type: "input",
-        message: "What is their position id?",
-        name: "position_id"
-    },
-    {
-        type: "input",
-        message: "What is their manager id?",
-        name: "manager_id"
+        type: "list",
+        message: "What is their department_id?",
+        name: "role",
+        choices: [1, 2, 3, 4, 5]
+
     }]).then((responses) => {
-        connection.query("INSERT INTO employee SET ?",
+        connection.query("INSERT INTO employees SET ?",
             {
-                id: responses.id,
+
                 first_name: responses.first_name,
                 last_name: responses.last_name,
-                position_id: responses.position_id,
-                manager_id: responses.manager_id
+                role_id: responses.department
             },
             (err, res) => {
                 if (err) throw (err);
@@ -156,36 +180,15 @@ addEmployee = () => {
 };
 trashCompactor = () => {
     inquirer.prompt([{
-        type: "input",
-        message: "What is the first name of the employee?",
-        name: "first_name"
-    },
-    {
-        type: "input",
-        Maessage: "What is their last name?",
-        name: "last_name"
-    },
-    {
-        type: "input",
-        message: "What is their id?",
-        name: "id"
-    },
-    {
-        type: "input",
-        message: "What is their position id?",
-        name: "position_id"
-    },
-    {
-        type: "input",
-        message: "What is their manager id?",
-        name: "manager_id"
+        type: "list",
+        message: "What Employee would you like to remove?",
+        name: "remover",
+        choices: ["Samantha Tinoco", "Jessica Kalin", "Nicholas Maas", "Mike Christner",
+            "Will Kerns", "Patrick Ellenburg", "Baley Culbert", "Caitlin Mckee", "Charles Maas"]
     }]).then((answer) => {
-        connection.query("DELETE FROM employee WHERE manager_id = null", {
-            id: answer.id,
-            first_name: answer.first_name,
-            last_name: answer.last_name,
-            position_id: answer.position_id,
-            manager_id: answer.manager_id
+        connection.query("DELETE FROM employees WHERE ?", {
+            remover: answer.choices
+
         }, (err, res) => {
             if (err) throw (err);
             console.table(res.affectedRows + "Employee Removed!");
@@ -199,7 +202,7 @@ updateEmployee = () => {
         type: "list",
         message: "Select employee to update",
         name: "updater",
-        choices: [connection.query("SELECT * FROM employee", (err, res) => {
+        choices: [connection.query("SELECT * FROM employees", (err, res) => {
             console.table(res)
         })]
     }).then((updates) => {

@@ -4,68 +4,82 @@ create database employee_DB;
 
 use employee_DB;
 
-create table department
+create table departments
 (
-    id integer
-    auto_increment not null,
-name varchar
-    (30),
-primary key
-    (id)
+    id INTEGER
+    auto_increment primary key,
+    name varchar
+    (30) not null
 );
 
-    create table role
+    create table roles
     (
-        id integer not null,
-        title varchar (30),
-        salary decimal (10,4),
-        position_id integer,
-        primary key (id)
+        id integer
+        auto_increment primary key,
+        title varchar
+        (30) not null,
+        salary decimal
+        (10,4) not null,
+        department_id integer not null,
+        constraint fk_department FOREIGN KEY
+        (department_id) REFERENCES departments
+        (id) 
+        
     );
 
-    create table employee
-    (
-        id integer not null,
-        first_name varchar (30),
-        last_name varchar (30),
-        position_id integer,
-        manager_id integer
+        create table employees
+        (
+            id integer
+            auto_increment PRIMARY KEY,
+        first_name varchar
+            (30) not null,
+        last_name varchar
+            (30) not null,
+        role_id integer not null,
+        manager_id integer null,
+        constraint fk_role foreign key
+            (role_id) REFERENCES roles
+            (id),
+        constraint fk_manager foreign key
+            (manager_id) REFERENCES employees
+            (id)
+        
     );
 
-    select *
-    from department;
-    select *
-    from role;
-    select *
-    from employee;
+            select *
+            from departments;
+            select *
+            from roles;
+            select *
+            from employees;
 
 
-    insert into department
-        (id, name)
-    values
-        (12, "Development"),
-        (13, "Advertising"),
-        (14, "Legal"),
-        (11, "Sales"),
-        (15, "President");
-    insert into role
-        (id, title, salary, position_id)
-    values
-        (16, "Manager", 80000.00, 11),
-        (17, "Developer", 150000.00, 12),
-        (18, "Associate", 100000.00, 13),
-        (19, "Lawyer", 200000.00, 14),
-        (20, "President", 500000.00, 15);
-    insert into employee
-        (id, first_name, last_name, position_id, manager_id)
-    values
-        (1978, "Nicholas", "Maas", 12, 08),
-        (1948, "Charles", "Maas", 15, null),
-        (1997, "Samantha", "Tinoco", 14, 09),
-        (1993, "Jessica", "Kalin", 13, 10),
-        (1979, "Will", "Kerns", 11, 11),
-        (1977, "Mike", "Christner", 11, 10),
-        (1991, "Patrick", "Ellenburg", 13, 11),
-        (2002, "Baley", "Culbert", 14, 09),
-        (1994, "Caitlin", "McKee", 12, 08);
+            insert into departments
+                (name)
+            values
+                ("Development"),
+                ("Advertising"),
+                ("Legal"),
+                ("Sales"),
+                ("President");
+            insert into roles
+                (title, salary, department_id)
+            values
+                ("Sales", 80000.00, 4),
+                ("Developer", 150000.00, 1),
+                ("Associate", 100000.00, 2),
+                ("Lawyer", 200000.00, 3),
+                ("President", 500000.00, 5);
+            insert into employees
+                (first_name, last_name, role_id, manager_id)
+            values
+                ("Nicholas", "Maas", 1, 1),
+                ("Charles", "Maas", 5, null),
+                ("Samantha", "Tinoco", 3, 3),
+                ("Jessica", "Kalin", 4, 4),
+                ("Will", "Kerns", 2, null),
+                ("Mike", "Christner", 2, 5),
+                ("Patrick", "Ellenburg", 4, 6),
+                ("Baley", "Culbert", 3, null ),
+                ("Caitlin", "McKee", 1, null);
 
