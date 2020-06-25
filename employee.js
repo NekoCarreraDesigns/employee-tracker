@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "8Limb$Thai1978",
+    password: "root",
     database: "employee_DB"
 });
 //connect to database
@@ -81,12 +81,13 @@ start = () => {
     });
 };
 employeeView = () => {
-    connection.query("SELECT first_name, last_name FROM employees", (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        start();
+    connection.query("SELECT * FROM employees INNER JOIN roles ON manager_id = department_id "
+        , (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            start();
 
-    });
+        });
 };
 departmentView = () => {
     inquirer.prompt({
@@ -183,7 +184,7 @@ addEmployee = () => {
             {
                 first_name: responses.first_name,
                 last_name: responses.last_name,
-                role_id: responses.department
+                role_id: responses.role
             },
             (err, res) => {
                 if (err) throw err;
@@ -244,7 +245,7 @@ trashCompactor = () => {
         message: "What is their role id?",
         name: "role_id"
     }]).then((answer) => {
-        connection.query("DELETE FROM employees WHERE ?", {
+        connection.query("DELETE FROM employees WHERE id = 12", {
             first_name: answer.first_name,
             last_name: answer.last_name,
             role_id: answer.role_id
