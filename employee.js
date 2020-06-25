@@ -30,9 +30,12 @@ start = () => {
         type: "list",
         message: "What would you like to do?",
         choices: [
+            "View All Departments",
             "View All Employees",
             "View All Employees by Department",
             "View All Employees by Manager",
+            "Add Department",
+            "Remove Department",
             "Add Employee",
             "Remove Employee",
             "Update Employee Role",
@@ -42,6 +45,9 @@ start = () => {
         //switch statement for options
     }).then((answers) => {
         switch (answers.intro) {
+            case "View All Departments":
+                return viewAllDept();
+                break;
             case "View All Employees":
                 return employeeView();
                 break;
@@ -50,6 +56,12 @@ start = () => {
                 break;
             case "View All Employees by Manager":
                 return managerView();
+                break;
+            case "Add Department":
+                return deptAdder();
+                break;
+            case "Remove Department":
+                return deptRemover();
                 break;
             case "Add Employee":
                 return addEmployee();
@@ -69,7 +81,8 @@ start = () => {
     });
 };
 employeeView = () => {
-    connection.query("SELECT * FROM employees", (err, res) => {
+    connection.query("SELECT first_name, last_name FROM employees", (err, res) => {
+        if (err) throw err;
         console.table(res);
         start();
 
@@ -139,8 +152,6 @@ managerView = () => {
                     console.table(res);
                     start();
                 });
-
-
         };
     });
 };
@@ -161,36 +172,85 @@ addEmployee = () => {
         type: "list",
         message: "What is their department_id?",
         name: "role",
-        choices: [1, 2, 3, 4, 5]
+        choices: [{ value: 1, name: "Development", short: "1-Development" },
+        { value: 2, name: "Advertising", short: "2-Advertising" },
+        { value: 3, name: "legal", short: "3-Legal" },
+        { value: 4, name: "Sales", short: "4-Sales" },
+        { value: 5, name: "President", short: "5-President" }]
 
     }]).then((responses) => {
         connection.query("INSERT INTO employees SET ?",
             {
-
                 first_name: responses.first_name,
                 last_name: responses.last_name,
                 role_id: responses.department
             },
             (err, res) => {
-                if (err) throw (err);
+                if (err) throw err;
                 console.table(res.affectedRows + "Employee Added!");
                 start();
             });
     });
 };
+deptAdder = () => {
+    inquirer.prompt({
+        type: "input",
+        name: "name",
+        message: "What department are you adding"
+    }).then((answer) => {
+        connection.query("INSERT INTO departments SET ?", {
+            name: answer.name
+        }, (err, res) => {
+            if (err) throw err;
+            console.table(res.affectedRows + "Department Added");
+            start();
+        });
+    });
+};
+deptRemover = () => {
+    inquirer.prompt({
+        type: "input",
+        message: "What department do you want to remove?",
+        name: "name"
+    }).then((answer) => {
+        connection.query("DELETE FROM departments WHERE ?", { name: answer.name }, (err, res) => {
+            if (err) throw err;
+            console.table(res.affectedRows = "Department Removed!")
+            start();
+        });
+    });
+};
+viewAllDept = () => {
+    connection.query("SELECT * FROM departments", (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        start();
+    })
+}
 trashCompactor = () => {
     inquirer.prompt([{
-        type: "list",
-        message: "What Employee would you like to remove?",
-        name: "remover",
-        choices: ["Samantha Tinoco", "Jessica Kalin", "Nicholas Maas", "Mike Christner",
-            "Will Kerns", "Patrick Ellenburg", "Baley Culbert", "Caitlin Mckee", "Charles Maas"]
+        type: "input",
+        message: "What is their first name?",
+        name: "first_name"
+    },
+    {
+        type: "input",
+        message: "What is their last name?",
+        name: "last_name"
+
+    },
+    {
+        type: "input",
+        message: "What is their role id?",
+        name: "role_id"
     }]).then((answer) => {
         connection.query("DELETE FROM employees WHERE ?", {
-            remover: answer.choices
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: answer.role_id
 
         }, (err, res) => {
-            if (err) throw (err);
+            if (err) throw err;
             console.table(res.affectedRows + "Employee Removed!");
             start();
         });
@@ -200,23 +260,68 @@ trashCompactor = () => {
 updateEmployee = () => {
     inquirer.prompt({
         type: "list",
-        message: "Select employee to update",
-        name: "updater",
-        choices: [connection.query("SELECT * FROM employees", (err, res) => {
-            console.table(res)
-        })]
-    }).then((updates) => {
-        switch (updates.updater) {
-            case "Manager":
-        }
-    })
-    connection.query("UPDATE employee SET ? WHERE ?", {
+        message: "What is their new role?",
+        name: "role_id",
+        choices: [{ value: 1, name: "Development", short: "1-Development" },
+        { value: 2, name: "Advertising", short: "2-Advertising" },
+        { value: 3, name: "Legal", short: "3-Legal" },
+        { value: 4, name: "Sales", short: "4-Sales" },
+        { value: 5, name: "President", short: "5-President" },
+        { value: 6, name: "Vice President", short: "6-Vice President" }]
 
-    }, (err, res) => {
+    },
+        {
+            type: "input",
+            message: "What is their first name",
+            name: "first_name"
+        },
+        {
+            type: "input",
+            message: "What is their last name?",
+            name: "last_name"
+        }).then((answer) => {
+            connection.query("UPDATE employees SET ? WHERE ?", {
+                role_id: answer.choices,
+                first_name: answer.first_name,
+                last_name: answer.last_name
+            }, (err, res) => {
+                if (err) throw err;
+                console.table(res.affectedRows + "Employee Role Updated");
+                start();
+            });
+        });
+};
+managerUpdate = () => {
+    inquirer.prompt({
+        type: "input",
+        message: "What is their first name?",
+        name: "first_name"
+    },
+        {
+            type: "input",
+            message: "What is their last name?",
+            name: "last_name"
+        },
+        {
+            type: "input",
+            message: "What is their new manager id?",
+            name: "manager_id"
+        }).then((answer) => {
+            connection.query("UPDATE employees SET ? WHERE manager_id = ?",
+                {
+                    first_name: answer.first_name,
+                    last_name: answer.last_name,
+                    manager_id: answer.manager_id
 
-    })
-}
+                }, (err, res) => {
+                    if (err) throw err;
+                    console.table(res.affectedRows + "Manager Updated!");
+                    start();
+                });
+        });
+};
 //listener for the server
 app.listen(PORT, (err, data) => {
+    if (err) throw err;
     console.log("I'm listening on port:" + PORT);
 });
