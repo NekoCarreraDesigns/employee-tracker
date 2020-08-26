@@ -1,20 +1,57 @@
-# employee-tracker
 
-This is the CMS employee tracker CLI for node.js with this you can manage employees, add departments, remove departments, view employees by their managers, view employees by depatrments and various other tasks.
+  # Title: Employee Tracker
 
-How to install:
-1. clone repo
-2. npm init
-3. install dependencies
-4. run the schema in sql
-5. from the cli run node employee.js
+  ![last commit](https://img.shields.io/github/last-commit/NekoCarreraDesigns/employee-tracker?style=flat-square)![license badge](https://img.shields.io/github/license/NekoCarreraDesigns/employee-tracker?style=flat-square)
 
-remember to input your own password in the connection.js file
+  ### URL: https://drive.google.com/file/d/1zig7CcZptLKOcA2tOe6vp0-Af3fkD2nQ/view
 
-technologies used: node.js, ES6, MySQL, express.js
+  ## Description 
+  
+  CRM for tracking employees using a sql database, and express.js
 
-Contributors: Nicholas C. Maas
+  ## Table of Contents 
+   
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Future Developments](#futureDevelopments)
+  * [Credits](#credits)
+  * [Questions](#questions)
+  
+  ## Installation 
+  ``  clone repo, npm i, make sure you enter your password in connection.js, node employee.js
+  ``  
+  ## Usage 
+  
+  Add employees, remove employees, add departments, remove departments, view employees by departments, view employees by manager, change employee roles.
 
-Tests: none at this time
+  ## Future Developments
 
-find some bugs? email Nicholas C. Maas at denvernick@htomail.com
+  undefined
+
+  ## Credits
+
+  * console.table
+
+* [Express.js](https://www.npmjs.com/package/express)
+
+* [Inquirer](https://www.npmjs.com/package/inquirer)
+
+* [MySQL](https://www.npmjs.com/package/mysql)
+
+  ## Contributors: 
+  
+  Nicholas C. Maas
+
+  ## Questions?
+
+  Contact me at  [denvernick@hotmail.com]
+  
+  or[![Follow on Github] (https://img.shields.io/github/followers/NekoCarreraDesigns?label=Follow&style=social)](http://www.github.com/NekoCarreraDesigns)
+
+  Copyright © 2020 Nicholas C. Maas (http://www.github.com/NekoCarreraDesigns)
+
+  ---
+
+  ##### _Created with [NekoCarreraDesigns readme generator] (https://github.com/NekoCarreraDesigns/readme-generator)
+
+  
